@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance, type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://agendapro-qer7.onrender.com/api';
 
 // Criar instância do axios
 const api: AxiosInstance = axios.create({

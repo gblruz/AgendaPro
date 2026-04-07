@@ -94,7 +94,7 @@ export function Pricing() {
     try {
       setLoadingPlan(priceId);
       const response = await axios.post(
-        'http://localhost:3001/api/payments/create-checkout-session',
+        'https://agendapro-qer7.onrender.com/api/payments/create-checkout-session',
         { priceId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
