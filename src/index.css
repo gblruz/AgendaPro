@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 263 70% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 263 70% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 263 70% 58%;
+    --radius: 0.75rem;
+    
+    --purple-primary: #7C3AED;
+    --purple-light: #A855F7;
+    --dark-bg: #0F0F0F;
+    --dark-card: #1A1A1A;
+    --dark-border: #2A2A2A;
+    --text-gray: #9CA3AF;
+    --success: #10B981;
+    --error: #EF4444;
+    --warning: #F59E0B;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-[#0F0F0F] text-white antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#7C3AED] to-[#A855F7];
+  }
+  
+  .bg-glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-[#7C3AED] to-[#A855F7] text-white font-medium px-6 py-3 rounded-xl 
+           transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105
+           active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply bg-white/10 text-white font-medium px-6 py-3 rounded-xl border border-white/20
+           transition-all duration-300 hover:bg-white/15 hover:border-white/30;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10;
+  }
+  
+  .input-dark {
+    @apply bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl px-4 py-3 text-white 
+           placeholder:text-gray-500 focus:outline-none focus:border-[#7C3AED] focus:ring-2 
+           focus:ring-[#7C3AED]/20 transition-all duration-300;
+  }
+  
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #2A2A2A #0F0F0F;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-[#0F0F0F];
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-[#2A2A2A] rounded-full;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-[#3A3A3A];
+  }
+}
+
+/* Animações */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.6); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Glassmorphism para navbar */
+.glass-nav {
+  @apply bg-[#0F0F0F]/80 backdrop-blur-xl border-b border-white/5;
+}
+
+/* Efeito de hover em cards */
+.hover-lift {
+  @apply transition-all duration-300;
+}
+
+.hover-lift:hover {
+  @apply -translate-y-1 shadow-lg;
+}
+
+/* Gradiente de fundo sutil */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+}

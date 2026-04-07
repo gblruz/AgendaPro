@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+dist/
+.DS_Store
+
+# Variáveis de Ambiente (SENSÍVEL)
+.env
+.env.local
+.env.*.local
+
+# Banco de Dados Local
+*.sqlite
+*.sqlite-journal
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.vscode/
+.idea/
