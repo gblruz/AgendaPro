@@ -1,0 +1,28 @@
+🚀 RESUMO DE CONFIGURAÇÃO - AGENDA PRO
+
+Copie e cole estes valores nas variáveis de ambiente (Environment Variables) do seu backend no Render:
+
+---------------------------------------------------------
+1. SUPABASE_URL
+https://cfpvemlelyejfotkrovi.supabase.co
+
+2. SUPABASE_KEY
+sb_publishable_EwALKihe9MvsS7E1AYijeA_weablkdB
+
+3. JWT_SECRET
+agendapro_secret_key_2026_secure_token
+
+4. STRIPE_SECRET_KEY
+(Pegue no painel do Stripe em Developers > API keys)
+
+---------------------------------------------------------
+IDs DOS PLANOS NO STRIPE (Para referência):
+- Plano Básico: price_1TJaSqIbNAgbrRAaPp9jcAZy
+- Plano Profissional: price_1TJaSwIbNAgbrRAaNl1VWGkk
+- Plano Empresarial: price_1TJaT3IbNAgbrRAaJueBXMnI
+
+---------------------------------------------------------
+DICA: No Render, adicione também:
+NODE_ENV=production
+PORT=3001
+---------------------------------------------------------
