@@ -75,7 +75,6 @@ const authController = {
         .from('users')
         .select('*')
         .eq('email', email)
-        .eq('active', true)
         .single();
 
       if (error || !user) {
