@@ -100,14 +100,14 @@ export function Register() {
                 Nome completo *
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none z-10" />
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Seu nome"
-                  className="input-dark w-full pl-12"
+                  className="input-dark w-full pl-12 relative z-0"
                   required
                 />
               </div>
@@ -119,14 +119,14 @@ export function Register() {
                 Email *
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none z-10" />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="seu@email.com"
-                  className="input-dark w-full pl-12"
+                  className="input-dark w-full pl-12 relative z-0"
                   required
                 />
               </div>
@@ -138,14 +138,14 @@ export function Register() {
                 Telefone
               </label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none z-10" />
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="(11) 99999-9999"
-                  className="input-dark w-full pl-12"
+                  className="input-dark w-full pl-12 relative z-0"
                 />
               </div>
             </div>
@@ -156,14 +156,14 @@ export function Register() {
                 Senha *
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none z-10" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="input-dark w-full pl-12 pr-12"
+                  className="input-dark w-full pl-12 pr-12 relative z-0"
                   required
                   minLength={6}
                 />
@@ -184,14 +184,14 @@ export function Register() {
                 Confirmar senha *
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none z-10" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="input-dark w-full pl-12"
+                  className="input-dark w-full pl-12 relative z-0"
                   required
                 />
               </div>
