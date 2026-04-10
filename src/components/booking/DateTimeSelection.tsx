@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { professionalAPI, type Professional } from '@/services/api';
-import { format } from 'date-fns';
+import { type Professional } from '@/services/api';
 import { ptBR } from 'date-fns/locale';
 
 interface DateTimeSelectionProps {
@@ -14,7 +13,7 @@ interface DateTimeSelectionProps {
   onBack: () => void;
 }
 
-export function DateTimeSelection({ businessId, service, professionals, onSelect, onBack }: DateTimeSelectionProps) {
+export function DateTimeSelection({ professionals, onSelect, onBack }: DateTimeSelectionProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);

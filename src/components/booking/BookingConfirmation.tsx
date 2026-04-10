@@ -17,7 +17,6 @@ interface BookingConfirmationProps {
 }
 
 export function BookingConfirmation({ 
-  business, 
   service, 
   professional, 
   date, 

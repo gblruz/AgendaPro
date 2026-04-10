@@ -10,7 +10,7 @@ interface BookingSuccessProps {
   time: string;
 }
 
-export function BookingSuccess({ business, date, time }: BookingSuccessProps) {
+export function BookingSuccess({ date, time }: BookingSuccessProps) {
   return (
     <div className="text-center py-12 space-y-8">
       <div className="flex justify-center">
