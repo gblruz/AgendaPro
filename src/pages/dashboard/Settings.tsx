@@ -28,6 +28,7 @@ export function Settings() {
     address: '',
     phone: '',
     email: '',
+    theme_color: '#7C3AED',
   });
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export function Settings() {
           address: business.address || '',
           phone: business.phone || '',
           email: business.email || '',
+          theme_color: business.theme_color || '#7C3AED',
         });
       }
     }
@@ -200,14 +202,34 @@ export function Settings() {
                   </div>
 
                   <form onSubmit={handleUpdateBusiness} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-1">Nome do Negócio</label>
-                      <input
-                        type="text"
-                        value={businessData.name}
-                        onChange={(e) => setBusinessData({ ...businessData, name: e.target.value })}
-                        className="input-dark w-full"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-1">Nome do Negócio</label>
+                        <input
+                          type="text"
+                          value={businessData.name}
+                          onChange={(e) => setBusinessData({ ...businessData, name: e.target.value })}
+                          className="input-dark w-full"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-1">Cor do Tema</label>
+                        <div className="flex gap-3 items-center">
+                          <input
+                            type="color"
+                            value={businessData.theme_color}
+                            onChange={(e) => setBusinessData({ ...businessData, theme_color: e.target.value })}
+                            className="w-12 h-10 p-0.5 rounded cursor-pointer border border-white/10 shrink-0 bg-[#1A1A1A]"
+                          />
+                          <input
+                            type="text"
+                            value={businessData.theme_color}
+                            onChange={(e) => setBusinessData({ ...businessData, theme_color: e.target.value })}
+                            className="input-dark w-full uppercase"
+                            maxLength={7}
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-400 mb-1">Descrição</label>

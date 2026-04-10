@@ -48,6 +48,7 @@ const seedDB = (): DBState => {
         phone: '11999999999',
         email: 'contato@studiovip.com',
         owner_id: adminId,
+        theme_color: '#7C3AED',
         active: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -209,7 +210,8 @@ export const businessAPI = {
       created_at: new Date().toISOString(), 
       updated_at: new Date().toISOString(),
       name: data.name!,
-      owner_id: '1'
+      owner_id: '1',
+      theme_color: data.theme_color || '#7C3AED'
     };
     db.businesses.push(b);
     saveDB(db);
@@ -506,6 +508,7 @@ export interface Business {
   phone?: string;
   email?: string;
   logo?: string;
+  theme_color?: string;
   owner_id: string;
   working_hours?: string;
   active: boolean;

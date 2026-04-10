@@ -103,8 +103,35 @@ export function BookingPage() {
     );
   }
 
+  const themeStyle = business?.theme_color ? (
+    <style dangerouslySetInnerHTML={{ __html: `
+      .booking-theme-wrapper {
+        --theme-color: ${business.theme_color};
+      }
+      .booking-theme-wrapper .text-\\[\\#7C3AED\\] { color: var(--theme-color) !important; }
+      .booking-theme-wrapper .group:hover .group-hover\\:text-\\[\\#7C3AED\\] { color: var(--theme-color) !important; }
+      .booking-theme-wrapper .bg-\\[\\#7C3AED\\] { background-color: var(--theme-color) !important; }
+      .booking-theme-wrapper .border-\\[\\#7C3AED\\] { border-color: var(--theme-color) !important; }
+      .booking-theme-wrapper .hover\\:border-\\[\\#7C3AED\\]\\/50:hover { border-color: color-mix(in srgb, var(--theme-color) 50%, transparent) !important; }
+      .booking-theme-wrapper .border-\\[\\#7C3AED\\]\\/30 { border-color: color-mix(in srgb, var(--theme-color) 30%, transparent) !important; }
+      .booking-theme-wrapper .border-t-\\[\\#7C3AED\\] { border-top-color: var(--theme-color) !important; }
+      .booking-theme-wrapper .hover\\:bg-\\[\\#7C3AED\\]\\/5:hover { background-color: color-mix(in srgb, var(--theme-color) 5%, transparent) !important; }
+      .booking-theme-wrapper .bg-\\[\\#7C3AED\\]\\/10 { background-color: color-mix(in srgb, var(--theme-color) 10%, transparent) !important; }
+      .booking-theme-wrapper .bg-\\[\\#7C3AED\\]\\/20 { background-color: color-mix(in srgb, var(--theme-color) 20%, transparent) !important; }
+      
+      .booking-theme-wrapper .btn-primary {
+         background: var(--theme-color) !important;
+         box-shadow: none !important;
+      }
+      .booking-theme-wrapper .btn-primary:hover {
+         box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--theme-color) 25%, transparent) !important;
+      }
+    `}} />
+  ) : null;
+
   return (
-    <div className="min-h-screen bg-[#0F0F0F] py-12 px-4">
+    <div className="min-h-screen bg-[#0F0F0F] py-12 px-4 booking-theme-wrapper">
+      {themeStyle}
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-6">
