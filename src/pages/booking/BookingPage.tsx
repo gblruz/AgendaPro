@@ -7,6 +7,7 @@ import { ClientInfo } from '@/components/booking/ClientInfo';
 import { BookingConfirmation } from '@/components/booking/BookingConfirmation';
 import { BookingSuccess } from '@/components/booking/BookingSuccess';
 import { toast } from 'sonner';
+import { ChevronLeft } from 'lucide-react';
 
 export function BookingPage() {
   const { businessId } = useParams<{ businessId: string }>();
@@ -106,6 +107,16 @@ export function BookingPage() {
     <div className="min-h-screen bg-[#0F0F0F] py-12 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
+        <div className="mb-6">
+          <button 
+            onClick={() => navigate('/')} 
+            className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-white transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 mr-1" />
+            Voltar para o início
+          </button>
+        </div>
+        
         <div className="text-center mb-12">
           {business?.logo ? (
             <img src={business.logo} alt={business.name} className="w-20 h-20 rounded-2xl mx-auto mb-4 object-cover" />

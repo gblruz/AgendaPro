@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, User } from 'lucide-react';
+import { Menu, X, Calendar, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -68,8 +68,8 @@ export function Navbar() {
               <>
                 <Link to="/dashboard">
                   <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">
-                    <User className="w-4 h-4 mr-2" />
-                    {user?.name?.split(' ')[0]}
+                    <LayoutDashboard className="w-4 h-4 mr-2" />
+                    Meu Painel
                   </Button>
                 </Link>
                 <Button
@@ -124,7 +124,7 @@ export function Navbar() {
                 <>
                   <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start text-gray-300">
-                      <User className="w-4 h-4 mr-2" />
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
                       Meu Painel
                     </Button>
                   </Link>
