@@ -44,7 +44,7 @@ export function BookingPage() {
         professionalAPI.list(businessId),
       ]);
 
-      setBusiness(bizRes.data.business);
+      setBusiness(bizRes.data.business || null);
       setServices(servRes.data.services);
       setProfessionals(profRes.data.professionals);
     } catch (error) {
