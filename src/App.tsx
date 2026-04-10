@@ -21,8 +21,22 @@ import { Reports } from '@/pages/dashboard/Reports';
 import { Settings } from '@/pages/dashboard/Settings';
 import { BookingPage } from '@/pages/booking/BookingPage';
 
+import { useEffect } from 'react';
+
 // Landing Page
 function LandingPage() {
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.replace('#', '');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300); // Aguarda a renderização inicial
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
