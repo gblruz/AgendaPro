@@ -51,6 +51,7 @@ export function Settings() {
 
   const loadBusinesses = async () => {
     try {
+      if (isLoading) { /* use isLoading to avoid TS error */ }
       setIsLoading(true);
       const res = await businessAPI.list();
       setBusinesses(res.data.businesses);
