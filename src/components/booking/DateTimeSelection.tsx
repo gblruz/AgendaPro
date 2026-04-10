@@ -21,7 +21,7 @@ export function DateTimeSelection({ professionals, onSelect, onBack }: DateTimeS
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (selectedDate && (selectedProfessional || professionals.length === 0)) {
+    if (selectedDate) {
       loadAvailableTimes();
     }
   }, [selectedDate, selectedProfessional]);
