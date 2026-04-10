@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { User, Plus, Search, Edit2, Trash2, Check, X, Mail, Phone, Briefcase } from 'lucide-react';
+import { User, Plus, Search, Edit2, Trash2, X, Mail, Phone, Briefcase, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { professionalAPI, businessAPI, type Professional, type Business } from '@/services/api';
 import { toast } from 'sonner';

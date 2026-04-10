@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, User, Building, Bell, Shield, CreditCard, Save, Camera, Plus, Trash2 } from 'lucide-react';
+import { User, Building, Bell, Shield, CreditCard, Save, Camera, Plus, Trash2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { businessAPI, authAPI, type Business } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,10 +8,10 @@ import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header } from '@/components/dashboard/Header';
 
 export function Settings() {
-  const { user, updateProfile } = useAuth();
+  const { user } = useAuth();
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [selectedBusiness, setSelectedBusiness] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, _setIsLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
 

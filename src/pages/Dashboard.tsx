@@ -9,6 +9,9 @@ import {
   XCircle,
   AlertCircle,
   ChevronRight,
+  Plus,
+  Scissors,
+  TrendingUp,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { appointmentAPI, businessAPI, type Appointment, type Business } from '@/services/api';
@@ -26,7 +29,7 @@ import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header } from '@/components/dashboard/Header';
 
 export function Dashboard() {
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [stats, setStats] = useState({
     totalAppointments: 0,

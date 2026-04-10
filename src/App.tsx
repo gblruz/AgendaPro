@@ -3,7 +3,7 @@ import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/sections/Hero';
-import { Services } from '@/sections/Services';
+import { Services as ServicesSection } from '@/sections/Services';
 import { Features } from '@/sections/Features';
 import { Pricing } from '@/sections/Pricing';
 import { Testimonials } from '@/sections/Testimonials';
@@ -15,11 +15,11 @@ import { Dashboard } from '@/pages/Dashboard';
 import { Appointments } from '@/pages/Appointments';
 import { NewAppointment } from '@/pages/NewAppointment';
 import { Clients } from '@/pages/dashboard/Clients';
-import { Services } from '@/pages/dashboard/Services';
+import { Services as ServicesPage } from '@/pages/dashboard/Services';
 import { Professionals } from '@/pages/dashboard/Professionals';
 import { Reports } from '@/pages/dashboard/Reports';
 import { Settings } from '@/pages/dashboard/Settings';
-import { BookingPage } from '@/pages/BookingPage';
+import { BookingPage } from '@/pages/booking/BookingPage';
 
 // Landing Page
 function LandingPage() {
@@ -28,7 +28,7 @@ function LandingPage() {
       <Navbar />
       <main>
         <Hero />
-        <Services />
+        <ServicesSection />
         <Features />
         <Pricing />
         <Testimonials />
@@ -141,7 +141,7 @@ function App() {
             path="/dashboard/services"
             element={
               <ProtectedRoute>
-                <Services />
+                <ServicesPage />
               </ProtectedRoute>
             }
           />

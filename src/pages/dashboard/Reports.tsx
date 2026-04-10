@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, DollarSign, Calendar, Users, Download, Filter, ChevronRight } from 'lucide-react';
+import { BarChart3, DollarSign, Calendar, Users, Download, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { appointmentAPI, businessAPI, type Business } from '@/services/api';
 import { toast } from 'sonner';
@@ -189,7 +189,7 @@ export function Reports() {
                           dataKey="count"
                           nameKey="name"
                         >
-                          {(stats.serviceStats || []).map((entry: any, index: number) => (
+                          {(stats.serviceStats || []).map((_: any, index: number) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>

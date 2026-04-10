@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Search, Mail, Phone, Calendar, MoreVertical, ExternalLink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Users, Search, Mail, Phone, Calendar, ExternalLink } from 'lucide-react';
 import { appointmentAPI, businessAPI, type Appointment, type Business } from '@/services/api';
 import { toast } from 'sonner';
 import { Sidebar } from '@/components/dashboard/Sidebar';

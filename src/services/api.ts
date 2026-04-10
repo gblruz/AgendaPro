@@ -226,6 +226,7 @@ export interface Appointment {
   service_name?: string;
   client_name?: string;
   client_phone?: string;
+  client_email?: string;
   professional_name?: string;
 }
 

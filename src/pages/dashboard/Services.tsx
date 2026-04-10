@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Scissors, Plus, Search, Edit2, Trash2, Check, X } from 'lucide-react';
+import { Scissors, Plus, Search, Edit2, Trash2, X, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { serviceAPI, businessAPI, type Service, type Business } from '@/services/api';
 import { toast } from 'sonner';
@@ -176,7 +176,7 @@ export function Services() {
                   <p className="text-sm text-gray-400 mb-4 line-clamp-2">{service.description || 'Sem descrição'}</p>
                   <div className="flex items-center justify-between pt-4 border-t border-white/5">
                     <div className="flex items-center gap-2 text-sm text-gray-400">
-                      <Plus className="w-4 h-4" />
+                      <Clock className="w-4 h-4" />
                       {service.duration} min
                     </div>
                     <div className="text-lg font-bold text-[#7C3AED]">
