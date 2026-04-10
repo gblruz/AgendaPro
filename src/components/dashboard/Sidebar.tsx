@@ -68,15 +68,26 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
+            const className = `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                  ${isActive 
+                    ? 'bg-[#7C3AED]/20 text-[#7C3AED]' 
+                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  }`;
+
+            if (item.href.includes('#')) {
+              return (
+                <a key={item.href} href={item.href} className={className}>
+                  <Icon className="w-5 h-5" />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </a>
+              );
+            }
+
             return (
               <Link
                 key={item.href}
                 to={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                  ${isActive 
-                    ? 'bg-[#7C3AED]/20 text-[#7C3AED]' 
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                  }`}
+                className={className}
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-sm font-medium">{item.label}</span>
