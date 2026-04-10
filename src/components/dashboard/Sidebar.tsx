@@ -8,17 +8,21 @@ import {
   LogOut,
   User,
   LayoutDashboard,
+  Home,
+  CreditCard,
   X
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const menuItems = [
+  { icon: Home, label: 'Início', href: '/' },
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
   { icon: Calendar, label: 'Agendamentos', href: '/dashboard/appointments' },
   { icon: Users, label: 'Clientes', href: '/dashboard/clients' },
   { icon: Scissors, label: 'Serviços', href: '/dashboard/services' },
   { icon: User, label: 'Profissionais', href: '/dashboard/professionals' },
   { icon: BarChart3, label: 'Relatórios', href: '/dashboard/reports' },
+  { icon: CreditCard, label: 'Planos', href: '/#pricing' },
   { icon: Settings, label: 'Configurações', href: '/dashboard/settings' },
 ];
 
