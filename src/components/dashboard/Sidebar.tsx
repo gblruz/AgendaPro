@@ -48,7 +48,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#1A1A1A] border-r border-white/5 
           transform transition-transform duration-300 lg:transform-none
-          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'}`}
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-white/5">
