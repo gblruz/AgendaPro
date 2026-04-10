@@ -3,23 +3,13 @@ import { Link } from 'react-router-dom';
 import {
   Calendar,
   Users,
-  Scissors,
   DollarSign,
-  Plus,
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
-  TrendingUp,
   ChevronRight,
-  BarChart3,
-  Settings,
-  LogOut,
-  Menu,
-  User,
-  LayoutDashboard,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { appointmentAPI, businessAPI, type Appointment, type Business } from '@/services/api';
 import { toast } from 'sonner';
@@ -32,21 +22,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-
-const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: Calendar, label: 'Agendamentos', href: '/dashboard/appointments' },
-  { icon: Users, label: 'Clientes', href: '/dashboard/clients' },
-  { icon: Scissors, label: 'Serviços', href: '/dashboard/services' },
-  { icon: User, label: 'Profissionais', href: '/dashboard/professionals' },
-  { icon: BarChart3, label: 'Relatórios', href: '/dashboard/reports' },
-  { icon: Settings, label: 'Configurações', href: '/dashboard/settings' },
-];
+import { Sidebar } from '@/components/dashboard/Sidebar';
+import { Header } from '@/components/dashboard/Header';
 
 export function Dashboard() {
-  const { user, logout } = useAuth();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [stats, setStats] = useState({
     totalAppointments: 0,
     todayAppointments: 0,
@@ -117,110 +98,17 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#0F0F0F] flex">
-      {/* Sidebar Desktop */}
-      <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#1A1A1A] border-r border-white/5 
-          transform transition-transform duration-300 lg:transform-none
-          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'}`}
-      >
-        {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-white/5">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7C3AED] to-[#A855F7] flex items-center justify-center">
-              <Calendar className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold text-white">AgendaPro</span>
-          </Link>
-        </div>
-
-        {/* Navigation */}
-        <nav className="p-4 space-y-1">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                  ${isActive 
-                    ? 'bg-[#7C3AED]/20 text-[#7C3AED]' 
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                  }`}
-              >
-                <Icon className="w-5 h-5" />
-                <span className="text-sm font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* User */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-[#7C3AED]/20 flex items-center justify-center">
-              <span className="text-[#7C3AED] font-medium">{user?.name?.[0]}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{user?.name}</p>
-              <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-            </div>
-          </div>
-          <button
-            onClick={logout}
-            className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-400 hover:text-white 
-              hover:bg-white/5 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sair
-          </button>
-        </div>
-      </aside>
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content */}
       <main className="flex-1 min-w-0">
-        {/* Header */}
-        <header className="h-16 bg-[#1A1A1A]/50 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-4 lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden p-2 text-gray-400 hover:text-white"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <h1 className="text-xl font-semibold text-white">Dashboard</h1>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {/* Business Selector */}
-            {businesses.length > 0 && (
-              <select
-                value={selectedBusiness}
-                onChange={(e) => setSelectedBusiness(e.target.value)}
-                className="input-dark text-sm py-2"
-              >
-                {businesses.map((b) => (
-                  <option key={b.id} value={b.id}>{b.name}</option>
-                ))}
-              </select>
-            )}
-            
-            <Link to="/dashboard/appointments/new">
-              <Button size="sm" className="btn-primary">
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Agendamento
-              </Button>
-            </Link>
-          </div>
-        </header>
+        <Header 
+          title="Dashboard" 
+          businesses={businesses}
+          selectedBusiness={selectedBusiness}
+          onBusinessChange={setSelectedBusiness}
+          onMenuClick={() => setIsSidebarOpen(true)}
+        />
 
         {/* Content */}
         <div className="p-4 lg:p-8">

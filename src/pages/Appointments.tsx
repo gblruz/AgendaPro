@@ -14,6 +14,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { appointmentAPI, businessAPI, type Appointment, type Business } from '@/services/api';
 import { toast } from 'sonner';
+import { Sidebar } from '@/components/dashboard/Sidebar';
+import { Header } from '@/components/dashboard/Header';
 
 import {
   DropdownMenu,
@@ -29,6 +31,7 @@ export function Appointments() {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     loadBusinesses();
@@ -153,29 +156,20 @@ export function Appointments() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F]">
-      {/* Header */}
-      <header className="h-16 bg-[#1A1A1A]/50 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-4 lg:px-8">
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard" className="p-2 text-gray-400 hover:text-white lg:hidden">
-            <ChevronLeft className="w-6 h-6" />
-          </Link>
-          <h1 className="text-xl font-semibold text-white">Agendamentos</h1>
-        </div>
+    <div className="min-h-screen bg-[#0F0F0F] flex">
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard/appointments/new">
-            <Button size="sm" className="btn-primary">
-              <Plus className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Novo Agendamento</span>
-              <span className="sm:hidden">Novo</span>
-            </Button>
-          </Link>
-        </div>
-      </header>
+      <main className="flex-1 min-w-0">
+        <Header 
+          title="Agendamentos" 
+          businesses={businesses}
+          selectedBusiness={selectedBusiness}
+          onBusinessChange={setSelectedBusiness}
+          onMenuClick={() => setIsSidebarOpen(true)}
+        />
 
-      {/* Content */}
-      <div className="p-4 lg:p-8">
+        {/* Content */}
+        <div className="p-4 lg:p-8">
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           {/* Business Selector */}

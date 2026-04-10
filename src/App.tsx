@@ -14,6 +14,12 @@ import { Register } from '@/pages/Register';
 import { Dashboard } from '@/pages/Dashboard';
 import { Appointments } from '@/pages/Appointments';
 import { NewAppointment } from '@/pages/NewAppointment';
+import { Clients } from '@/pages/dashboard/Clients';
+import { Services } from '@/pages/dashboard/Services';
+import { Professionals } from '@/pages/dashboard/Professionals';
+import { Reports } from '@/pages/dashboard/Reports';
+import { Settings } from '@/pages/dashboard/Settings';
+import { BookingPage } from '@/pages/BookingPage';
 
 // Landing Page
 function LandingPage() {
@@ -78,6 +84,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/booking/:businessId" element={<BookingPage />} />
           
           {/* Auth Routes */}
           <Route
@@ -119,6 +126,46 @@ function App() {
             element={
               <ProtectedRoute>
                 <NewAppointment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/clients"
+            element={
+              <ProtectedRoute>
+                <Clients />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/services"
+            element={
+              <ProtectedRoute>
+                <Services />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/professionals"
+            element={
+              <ProtectedRoute>
+                <Professionals />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             }
           />
