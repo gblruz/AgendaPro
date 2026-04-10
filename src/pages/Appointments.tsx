@@ -322,6 +322,7 @@ export function Appointments() {
           </div>
         )}
       </div>
+      </main>
     </div>
   );
 }
