@@ -1,4 +1,4 @@
-import { Menu, Plus } from 'lucide-react';
+import { Menu, Plus, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { type Business } from '@/services/api';
@@ -24,7 +24,7 @@ export function Header({ title, businesses, selectedBusiness, onBusinessChange, 
         <h1 className="text-xl font-semibold text-white">{title}</h1>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         {/* Business Selector */}
         {businesses.length > 0 && (
           <select
@@ -38,6 +38,19 @@ export function Header({ title, businesses, selectedBusiness, onBusinessChange, 
           </select>
         )}
         
+        {/* Public Booking Page Link */}
+        {selectedBusiness && (
+          <a href={`/booking/${selectedBusiness}`} target="_blank" rel="noopener noreferrer">
+            <Button size="sm" variant="outline" className="hidden border-white/10 text-gray-300 hover:text-white hover:bg-white/5 md:flex">
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Página Pública
+            </Button>
+            <Button size="icon" variant="outline" className="md:hidden border-white/10 text-gray-300 hover:text-white hover:bg-white/5">
+              <ExternalLink className="w-4 h-4" />
+            </Button>
+          </a>
+        )}
+
         <Link to="/dashboard/appointments/new">
           <Button size="sm" className="btn-primary">
             <Plus className="w-4 h-4 mr-2" />
