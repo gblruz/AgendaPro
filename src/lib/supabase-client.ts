@@ -18,7 +18,7 @@
  * ```
  */
 
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient, type AuthChangeEvent, type Session } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -76,7 +76,7 @@ export async function getCurrentSession() {
  * Listener para mudanças de autenticação.
  * Útil para sincronizar estado global quando a sessão muda.
  */
-export function onAuthStateChange(callback: (event: string, session: any) => void) {
+export function onAuthStateChange(callback: (event: AuthChangeEvent, session: Session | null) => void) {
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange((event, session) => {
@@ -167,7 +167,8 @@ export const supabaseQueries = {
   /**
    * Buscar horários disponíveis de um profissional.
    */
-  async getAvailableSlots(professionalId: string, date: string) {
+  async getAvailableSlots(professionalId: string, _date: string) {
+    // _date prefixado com underscore para indicar que é intencionalmente não utilizado no mock
     return supabase
       .from('availability')
       .select('*')
