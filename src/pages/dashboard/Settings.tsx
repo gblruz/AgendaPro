@@ -8,7 +8,7 @@ import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header } from '@/components/dashboard/Header';
 
 export function Settings() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [selectedBusiness, setSelectedBusiness] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +53,6 @@ export function Settings() {
 
   const loadBusinesses = async () => {
     try {
-      if (isLoading) { /* use isLoading to avoid TS error */ }
       setIsLoading(true);
       const res = await businessAPI.list();
       setBusinesses(res.data.businesses);
@@ -70,7 +69,9 @@ export function Settings() {
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await authAPI.updateProfile(profileData);
+      const response = await authAPI.updateProfile(profileData);
+      // Atualiza o contexto global com os novos dados do usuário
+      updateUser(response.data.user);
       toast.success('Perfil atualizado com sucesso');
     } catch (error) {
       toast.error('Erro ao atualizar perfil');
@@ -95,6 +96,14 @@ export function Settings() {
     { id: 'security', label: 'Segurança', icon: Shield },
     { id: 'billing', label: 'Assinatura', icon: CreditCard },
   ];
+
+  if (isLoading && businesses.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#7C3AED]/30 border-t-[#7C3AED] rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0F0F0F] flex">
@@ -268,7 +277,7 @@ export function Settings() {
                         className="input-dark w-full"
                       />
                     </div>
-                    <div className="pt-4 flex justify-between items-center">
+                    <div className="pt-4 flex gap-3">
                       <Button type="submit" className="btn-primary">
                         <Save className="w-4 h-4 mr-2" />
                         Salvar Alterações

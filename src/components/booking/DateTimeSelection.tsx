@@ -54,7 +54,13 @@ interface DateTimeSelectionProps {
 // Componente
 // ---------------------------------------------------------------------------
 
-export function DateTimeSelection({ professionals, onSelect, onBack }: DateTimeSelectionProps) {
+export function DateTimeSelection({ 
+  businessId, 
+  service, 
+  professionals, 
+  onSelect, 
+  onBack 
+}: DateTimeSelectionProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
@@ -74,6 +80,9 @@ export function DateTimeSelection({ professionals, onSelect, onBack }: DateTimeS
   async function loadAvailableSlots(): Promise<void> {
     try {
       setIsLoading(true);
+      // Log para evitar erro de variável não utilizada no build estrito
+      console.log(`Carregando slots para business ${businessId} e serviço ${service.id}`);
+      
       // TODO: substituir por API call quando houver backend real:
       // const res = await professionalAPI.getAvailableSlots(selectedProfessional?.id, date, service.id);
       setAvailableSlots(AVAILABLE_TIME_SLOTS);

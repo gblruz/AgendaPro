@@ -11,8 +11,24 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middlewares
-app.use(cors());
+// CORS — permitir frontend
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir requests sem origin (mobile, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Bloqueado pelo CORS'));
+  },
+  credentials: true,
+}));
+
+// Parse JSON — exceto webhook do Stripe (precisa do raw body)
 app.use((req, res, next) => {
   if (req.originalUrl === '/api/payments/webhook') {
     next();
@@ -51,7 +67,7 @@ app.use((req, res) => {
 });
 
 // Tratamento de erros gerais
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error('Erro:', err);
   res.status(500).json({ error: 'Erro interno do servidor' });
 });
@@ -64,7 +80,8 @@ app.listen(PORT, () => {
 ║   🚀 AgendaPro Backend                                 ║
 ║                                                        ║
 ║   Servidor rodando na porta ${PORT}                      ║
-║   Ambiente: ${process.env.NODE_ENV || 'development'}                            ║
+║   Ambiente: ${(process.env.NODE_ENV || 'development').padEnd(28)}║
+║   DB: Supabase                                         ║
 ║                                                        ║
 ║   API: http://localhost:${PORT}/api                      ║
 ║   Health: http://localhost:${PORT}/health                ║

@@ -10,7 +10,7 @@ interface BookingSuccessProps {
   time: string;
 }
 
-export function BookingSuccess({ date, time }: BookingSuccessProps) {
+export function BookingSuccess({ business, date, time }: BookingSuccessProps) {
   return (
     <div className="text-center py-12 space-y-8">
       <div className="flex justify-center">
@@ -22,7 +22,7 @@ export function BookingSuccess({ date, time }: BookingSuccessProps) {
       <div className="space-y-3">
         <h2 className="text-3xl font-bold text-white">Agendamento Confirmado!</h2>
         <p className="text-gray-400 max-w-md mx-auto">
-          Tudo certo! Seu agendamento foi realizado com sucesso. Você receberá um e-mail com os detalhes.
+          Tudo certo! Seu agendamento em <strong>{business.name}</strong> foi realizado com sucesso. Você receberá um e-mail com os detalhes.
         </p>
       </div>
 

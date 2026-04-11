@@ -17,6 +17,7 @@ interface BookingConfirmationProps {
 }
 
 export function BookingConfirmation({ 
+  business,
   service, 
   professional, 
   date, 
@@ -30,7 +31,7 @@ export function BookingConfirmation({
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Confirme seu Agendamento</h2>
-        <p className="text-gray-400">Revise os detalhes antes de finalizar</p>
+        <p className="text-gray-400">Revise os detalhes em {business.name} antes de finalizar</p>
       </div>
 
       <div className="space-y-6">

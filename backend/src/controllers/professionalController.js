@@ -1,39 +1,38 @@
-const { v4: uuidv4 } = require('uuid');
-const { run, get, all } = require('../database/connection');
+const supabase = require('../database/supabase');
 
 const professionalController = {
   // Criar profissional
   async create(req, res) {
     try {
-      const { user_id, business_id, bio, specialty, service_ids } = req.body;
+      const { business_id, name, email, phone, bio, specialty, service_ids } = req.body;
 
-      if (!user_id || !business_id) {
-        return res.status(400).json({ error: 'Usuário e negócio são obrigatórios' });
+      if (!business_id || !name) {
+        return res.status(400).json({ error: 'Negócio e nome são obrigatórios' });
       }
 
-      const professionalId = uuidv4();
-      await run(
-        `INSERT INTO professionals (id, user_id, business_id, bio, specialty) 
-         VALUES (?, ?, ?, ?, ?)`,
-        [professionalId, user_id, business_id, bio, specialty]
-      );
+      const { data: professional, error } = await supabase
+        .from('professionals')
+        .insert([{ 
+          business_id, 
+          name, 
+          email, 
+          phone, 
+          bio, 
+          specialty 
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
 
       // Associar serviços
       if (service_ids && service_ids.length > 0) {
-        for (const serviceId of service_ids) {
-          await run(
-            'INSERT INTO professional_services (professional_id, service_id) VALUES (?, ?)',
-            [professionalId, serviceId]
-          );
-        }
+        const links = service_ids.map(sid => ({
+          professional_id: professional.id,
+          service_id: sid
+        }));
+        await supabase.from('professional_services').insert(links);
       }
-
-      const professional = await get(`
-        SELECT p.*, u.name, u.email, u.phone, u.avatar 
-        FROM professionals p
-        JOIN users u ON p.user_id = u.id
-        WHERE p.id = ?
-      `, [professionalId]);
 
       res.status(201).json({
         message: 'Profissional criado com sucesso',
@@ -50,31 +49,27 @@ const professionalController = {
     try {
       const { business_id } = req.query;
 
-      let professionals;
+      let query = supabase
+        .from('professionals')
+        .select('*')
+        .eq('active', true)
+        .order('name');
+
       if (business_id) {
-        professionals = await all(`
-          SELECT p.*, u.name, u.email, u.phone, u.avatar 
-          FROM professionals p
-          JOIN users u ON p.user_id = u.id
-          WHERE p.business_id = ? AND p.active = 1
-        `, [business_id]);
-      } else {
-        professionals = await all(`
-          SELECT p.*, u.name, u.email, u.phone, u.avatar 
-          FROM professionals p
-          JOIN users u ON p.user_id = u.id
-          WHERE p.active = 1
-        `);
+        query = query.eq('business_id', business_id);
       }
+
+      const { data: professionals, error } = await query;
+      if (error) throw error;
 
       // Buscar serviços de cada profissional
       for (const prof of professionals) {
-        const services = await all(`
-          SELECT s.* FROM services s
-          JOIN professional_services ps ON s.id = ps.service_id
-          WHERE ps.professional_id = ? AND s.active = 1
-        `, [prof.id]);
-        prof.services = services;
+        const { data: services } = await supabase
+          .from('professional_services')
+          .select('service_id, services:service_id (*)')
+          .eq('professional_id', prof.id);
+
+        prof.services = services?.map(ps => ps.services).filter(Boolean) || [];
       }
 
       res.json({ professionals });
@@ -89,37 +84,37 @@ const professionalController = {
     try {
       const { id } = req.params;
 
-      const professional = await get(`
-        SELECT p.*, u.name, u.email, u.phone, u.avatar 
-        FROM professionals p
-        JOIN users u ON p.user_id = u.id
-        WHERE p.id = ? AND p.active = 1
-      `, [id]);
+      const { data: professional, error } = await supabase
+        .from('professionals')
+        .select('*')
+        .eq('id', id)
+        .eq('active', true)
+        .single();
 
-      if (!professional) {
+      if (error || !professional) {
         return res.status(404).json({ error: 'Profissional não encontrado' });
       }
 
       // Buscar serviços
-      const services = await all(`
-        SELECT s.* FROM services s
-        JOIN professional_services ps ON s.id = ps.service_id
-        WHERE ps.professional_id = ? AND s.active = 1
-      `, [id]);
+      const { data: services } = await supabase
+        .from('professional_services')
+        .select('service_id, services:service_id (*)')
+        .eq('professional_id', id);
 
-      // Buscar horários de disponibilidade
-      const availability = await all(
-        'SELECT * FROM availability WHERE professional_id = ? AND active = 1 ORDER BY day_of_week, start_time',
-        [id]
-      );
+      professional.services = services?.map(ps => ps.services).filter(Boolean) || [];
 
-      res.json({ 
-        professional: {
-          ...professional,
-          services,
-          availability
-        }
-      });
+      // Buscar disponibilidade
+      const { data: availability } = await supabase
+        .from('availability')
+        .select('*')
+        .eq('professional_id', id)
+        .eq('active', true)
+        .order('day_of_week')
+        .order('start_time');
+
+      professional.availability = availability || [];
+
+      res.json({ professional });
     } catch (error) {
       console.error('Erro ao buscar profissional:', error);
       res.status(500).json({ error: 'Erro ao buscar profissional' });
@@ -130,41 +125,44 @@ const professionalController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { bio, specialty, active, service_ids } = req.body;
+      const { name, email, phone, bio, specialty, active, service_ids } = req.body;
 
-      const professional = await get('SELECT * FROM professionals WHERE id = ?', [id]);
-      if (!professional) {
-        return res.status(404).json({ error: 'Profissional não encontrado' });
-      }
+      const updateData = {};
+      if (name !== undefined) updateData.name = name;
+      if (email !== undefined) updateData.email = email;
+      if (phone !== undefined) updateData.phone = phone;
+      if (bio !== undefined) updateData.bio = bio;
+      if (specialty !== undefined) updateData.specialty = specialty;
+      if (active !== undefined) updateData.active = active;
 
-      await run(
-        `UPDATE professionals SET 
-          bio = ?, specialty = ?, active = ?, updated_at = CURRENT_TIMESTAMP 
-         WHERE id = ?`,
-        [bio, specialty, active, id]
-      );
+      const { data: professional, error } = await supabase
+        .from('professionals')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
 
       // Atualizar serviços
       if (service_ids) {
-        await run('DELETE FROM professional_services WHERE professional_id = ?', [id]);
-        for (const serviceId of service_ids) {
-          await run(
-            'INSERT INTO professional_services (professional_id, service_id) VALUES (?, ?)',
-            [id, serviceId]
-          );
+        await supabase
+          .from('professional_services')
+          .delete()
+          .eq('professional_id', id);
+
+        if (service_ids.length > 0) {
+          const links = service_ids.map(sid => ({
+            professional_id: id,
+            service_id: sid
+          }));
+          await supabase.from('professional_services').insert(links);
         }
       }
 
-      const updatedProfessional = await get(`
-        SELECT p.*, u.name, u.email, u.phone, u.avatar 
-        FROM professionals p
-        JOIN users u ON p.user_id = u.id
-        WHERE p.id = ?
-      `, [id]);
-
       res.json({
         message: 'Profissional atualizado com sucesso',
-        professional: updatedProfessional
+        professional
       });
     } catch (error) {
       console.error('Erro ao atualizar profissional:', error);
@@ -172,17 +170,17 @@ const professionalController = {
     }
   },
 
-  // Deletar profissional
+  // Deletar profissional (soft delete)
   async delete(req, res) {
     try {
       const { id } = req.params;
 
-      const professional = await get('SELECT * FROM professionals WHERE id = ?', [id]);
-      if (!professional) {
-        return res.status(404).json({ error: 'Profissional não encontrado' });
-      }
+      const { error } = await supabase
+        .from('professionals')
+        .update({ active: false })
+        .eq('id', id);
 
-      await run('UPDATE professionals SET active = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [id]);
+      if (error) throw error;
 
       res.json({ message: 'Profissional removido com sucesso' });
     } catch (error) {
@@ -197,14 +195,13 @@ const professionalController = {
       const { id } = req.params;
       const { day_of_week, start_time, end_time } = req.body;
 
-      const availabilityId = uuidv4();
-      await run(
-        `INSERT INTO availability (id, professional_id, day_of_week, start_time, end_time) 
-         VALUES (?, ?, ?, ?, ?)`,
-        [availabilityId, id, day_of_week, start_time, end_time]
-      );
+      const { data: availability, error } = await supabase
+        .from('availability')
+        .insert([{ professional_id: id, day_of_week, start_time, end_time }])
+        .select()
+        .single();
 
-      const availability = await get('SELECT * FROM availability WHERE id = ?', [availabilityId]);
+      if (error) throw error;
 
       res.status(201).json({
         message: 'Disponibilidade adicionada com sucesso',
@@ -221,7 +218,13 @@ const professionalController = {
     try {
       const { id, availabilityId } = req.params;
 
-      await run('DELETE FROM availability WHERE id = ? AND professional_id = ?', [availabilityId, id]);
+      const { error } = await supabase
+        .from('availability')
+        .delete()
+        .eq('id', availabilityId)
+        .eq('professional_id', id);
+
+      if (error) throw error;
 
       res.json({ message: 'Disponibilidade removida com sucesso' });
     } catch (error) {
@@ -243,61 +246,63 @@ const professionalController = {
       // Buscar duração do serviço
       let serviceDuration = 60;
       if (service_id) {
-        const service = await get('SELECT duration FROM services WHERE id = ?', [service_id]);
-        if (service) {
-          serviceDuration = service.duration;
-        }
+        const { data: service } = await supabase
+          .from('services')
+          .select('duration')
+          .eq('id', service_id)
+          .single();
+        if (service) serviceDuration = service.duration;
       }
 
       // Dia da semana (0 = domingo)
-      const dayOfWeek = new Date(date).getDay();
+      const dayOfWeek = new Date(date + 'T12:00:00').getDay();
 
       // Buscar disponibilidade do profissional
-      const availability = await all(
-        'SELECT * FROM availability WHERE professional_id = ? AND day_of_week = ? AND active = 1',
-        [id, dayOfWeek]
-      );
+      const { data: availabilityList } = await supabase
+        .from('availability')
+        .select('*')
+        .eq('professional_id', id)
+        .eq('day_of_week', dayOfWeek)
+        .eq('active', true);
 
-      if (availability.length === 0) {
+      if (!availabilityList || availabilityList.length === 0) {
         return res.json({ slots: [] });
       }
 
       // Buscar agendamentos existentes
-      const appointments = await all(
-        `SELECT time, duration FROM appointments 
-         WHERE professional_id = ? AND date = ? AND status IN ('pending', 'confirmed')`,
-        [id, date]
-      );
+      const { data: appointments } = await supabase
+        .from('appointments')
+        .select('time, duration')
+        .eq('professional_id', id)
+        .eq('date', date)
+        .in('status', ['pending', 'confirmed']);
 
       // Buscar bloqueios
-      const blockedSlots = await all(
-        `SELECT start_time, end_time FROM blocked_slots 
-         WHERE professional_id = ? AND date = ?`,
-        [id, date]
-      );
+      const { data: blockedSlots } = await supabase
+        .from('blocked_slots')
+        .select('start_time, end_time')
+        .eq('professional_id', id)
+        .eq('date', date);
 
       // Gerar slots disponíveis
       const slots = [];
-      for (const avail of availability) {
-        const startTime = avail.start_time;
-        const endTime = avail.end_time;
-        
-        let currentTime = new Date(`${date}T${startTime}`);
-        const endDateTime = new Date(`${date}T${endTime}`);
+      for (const avail of availabilityList) {
+        let currentTime = new Date(`${date}T${avail.start_time}`);
+        const endDateTime = new Date(`${date}T${avail.end_time}`);
 
         while (currentTime < endDateTime) {
           const timeStr = currentTime.toTimeString().slice(0, 5);
           const slotEndTime = new Date(currentTime.getTime() + serviceDuration * 60000);
 
-          // Verificar se há conflito com agendamentos existentes
-          const hasConflict = appointments.some(apt => {
+          // Verificar conflitos com agendamentos
+          const hasConflict = (appointments || []).some(apt => {
             const aptStart = new Date(`${date}T${apt.time}`);
             const aptEnd = new Date(aptStart.getTime() + apt.duration * 60000);
             return (currentTime < aptEnd && slotEndTime > aptStart);
           });
 
           // Verificar bloqueios
-          const isBlocked = blockedSlots.some(block => {
+          const isBlocked = (blockedSlots || []).some(block => {
             const blockStart = new Date(`${date}T${block.start_time}`);
             const blockEnd = new Date(`${date}T${block.end_time}`);
             return (currentTime < blockEnd && slotEndTime > blockStart);
